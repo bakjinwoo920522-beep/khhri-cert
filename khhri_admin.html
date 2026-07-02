@@ -160,6 +160,7 @@ tr:hover td { background:#fafafa; }
     <div class="tabs-main">
       <button class="main-tab on" onclick="switchMain('pass')">합격자 관리</button>
       <button class="main-tab" onclick="switchMain('apply')">응시 접수자</button>
+      <button class="main-tab" onclick="switchMain('round')">회차 관리</button>
     </div>
 
     <div id="main-pass">
@@ -255,6 +256,63 @@ tr:hover td { background:#fafafa; }
     </div>
     </div><!-- end main-pass -->
 
+    <!-- 회차 관리 -->
+    <div id="main-round" style="display:none">
+      <div class="grid2">
+        <!-- 회차 등록 폼 -->
+        <div class="card">
+          <div class="card-title">➕ 회차 등록</div>
+          <div class="fg" style="margin-bottom:12px">
+            <label>회차 번호 *</label>
+            <input id="r-num" placeholder="예: 5" type="number" min="1"/>
+          </div>
+          <div class="fg" style="margin-bottom:12px">
+            <label>회차 이름 *</label>
+            <input id="r-name" placeholder="예: 제5회 (2027년 상반기)"/>
+          </div>
+          <div class="fg" style="margin-bottom:12px">
+            <label>접수 시작일</label>
+            <input id="r-start" type="date"/>
+          </div>
+          <div class="fg" style="margin-bottom:12px">
+            <label>접수 마감일</label>
+            <input id="r-end" type="date"/>
+          </div>
+          <div class="fg" style="margin-bottom:12px">
+            <label>시험일</label>
+            <input id="r-exam" type="date"/>
+          </div>
+          <div class="fg" style="margin-bottom:16px">
+            <label>상태</label>
+            <select id="r-status">
+              <option value="접수중">접수중</option>
+              <option value="접수마감">접수마감</option>
+              <option value="시험완료">시험완료</option>
+              <option value="준비중">준비중</option>
+            </select>
+          </div>
+          <button class="add-btn" id="round-add-btn" onclick="doAddRound()">회차 등록</button>
+          <div class="add-msg" id="round-msg"></div>
+        </div>
+
+        <!-- 회차 목록 -->
+        <div>
+          <div class="list-head" style="margin-bottom:12px">
+            <h3>등록된 회차</h3>
+          </div>
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="tbl-loading" id="round-loading"><span class="spinner"></span>불러오는 중...</div>
+            <table id="round-tbl" style="display:none">
+              <thead>
+                <tr><th>회차</th><th>이름</th><th>접수기간</th><th>시험일</th><th>상태</th><th></th></tr>
+              </thead>
+              <tbody id="round-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 접수자 목록 -->
     <div id="main-apply" style="display:none">
       <div class="stats">
@@ -284,7 +342,7 @@ tr:hover td { background:#fafafa; }
           <thead>
             <tr>
               <th>수험번호</th><th>성명</th><th>등급</th><th>회차</th>
-              <th>연락처</th><th>이메일</th><th>접수일</th><th>합격자등록</th>
+              <th>연락처</th><th>이메일</th><th>접수일</th><th>합격자등록</th><th>삭제</th>
             </tr>
           </thead>
           <tbody id="apply-body"></tbody>
@@ -393,10 +451,12 @@ async function loadData() {
 
 // 메인 탭 전환
 window.switchMain = function(t) {
-  document.querySelectorAll('.main-tab').forEach((b,i) => b.classList.toggle('on', (i===0&&t==='pass')||(i===1&&t==='apply')));
-  document.getElementById('main-pass').style.display  = t==='pass' ? 'block' : 'none';
+  document.querySelectorAll('.main-tab').forEach((b,i) => b.classList.toggle('on', (i===0&&t==='pass')||(i===1&&t==='apply')||(i===2&&t==='round')));
+  document.getElementById('main-pass').style.display  = t==='pass'  ? 'block' : 'none';
   document.getElementById('main-apply').style.display = t==='apply' ? 'block' : 'none';
+  document.getElementById('main-round').style.display = t==='round' ? 'block' : 'none';
   if(t==='apply') loadApplyData();
+  if(t==='round') loadRoundData();
 };
 
 // 접수자 데이터
@@ -450,7 +510,22 @@ window.renderApply = function() {
     <td>${f.email||'-'}</td>
     <td>${f.appliedAt||'-'}</td>
     <td><button class="reg-btn" onclick="registerFromApply('${f._id}')">합격자 등록</button></td>
+    <td><button class="del-btn" onclick="deleteApply('${f._id}')">삭제</button></td>
   </tr>`).join('');
+};
+
+// 접수자 삭제
+window.deleteApply = async function(docId) {
+  if(!confirm('접수자를 삭제하시겠습니까?')) return;
+  try {
+    await deleteDoc(doc(db, 'applications', docId));
+    applyData = applyData.filter(x => x._id !== docId);
+    renderApply();
+    updateApplyStats();
+  } catch(e) {
+    alert('삭제 중 오류가 발생했습니다.');
+    console.error(e);
+  }
 };
 
 // 접수자에서 바로 합격자 등록
@@ -629,6 +704,106 @@ function updateStats() {
 }
 
 // CSV 내보내기
+// 회차 데이터
+let roundData = [];
+
+async function loadRoundData() {
+  document.getElementById('round-loading').style.display = 'block';
+  document.getElementById('round-tbl').style.display = 'none';
+  try {
+    const snap = await getDocs(collection(db, 'rounds'));
+    roundData = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+    roundData.sort((a,b) => Number(a.num) - Number(b.num));
+    renderRounds();
+  } catch(e) {
+    console.error('회차 로드 오류:', e);
+  } finally {
+    document.getElementById('round-loading').style.display = 'none';
+    document.getElementById('round-tbl').style.display = 'table';
+  }
+}
+
+function renderRounds() {
+  const tbody = document.getElementById('round-body');
+  if(roundData.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">등록된 회차가 없습니다.</td></tr>';
+    return;
+  }
+  const statusColor = { '접수중':'b-pass', '접수마감':'b-fail', '시험완료':'b-partial', '준비중':'b-partial' };
+  tbody.innerHTML = roundData.map(r => `<tr>
+    <td><strong>제${r.num}회</strong></td>
+    <td>${r.name}</td>
+    <td style="font-size:11px">${r.start||'-'} ~ ${r.end||'-'}</td>
+    <td style="font-size:11px">${r.exam||'-'}</td>
+    <td><span class="badge ${statusColor[r.status]||'b-partial'}">${r.status||'-'}</span></td>
+    <td><button class="del-btn" onclick="deleteRound('${r._id}')">삭제</button></td>
+  </tr>`).join('');
+}
+
+window.doAddRound = async function() {
+  const num    = document.getElementById('r-num').value.trim();
+  const name   = document.getElementById('r-name').value.trim();
+  const start  = document.getElementById('r-start').value;
+  const end    = document.getElementById('r-end').value;
+  const exam   = document.getElementById('r-exam').value;
+  const status = document.getElementById('r-status').value;
+  const msg    = document.getElementById('round-msg');
+  const btn    = document.getElementById('round-add-btn');
+
+  if(!num || !name) {
+    msg.textContent = '⚠ 회차 번호와 이름을 입력해주세요.';
+    msg.className = 'add-msg err';
+    msg.style.display = 'block';
+    return;
+  }
+
+  if(roundData.find(r => r.num === num)) {
+    msg.textContent = '⚠ 이미 등록된 회차 번호입니다.';
+    msg.className = 'add-msg err';
+    msg.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '등록 중...';
+
+  try {
+    const docRef = await addDoc(collection(db, 'rounds'), { num, name, start, end, exam, status });
+    roundData.push({ _id: docRef.id, num, name, start, end, exam, status });
+    roundData.sort((a,b) => Number(a.num) - Number(b.num));
+    renderRounds();
+
+    // 폼 초기화
+    ['r-num','r-name','r-start','r-end','r-exam'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('r-status').value = '접수중';
+
+    msg.textContent = '✓ 회차 등록 완료!';
+    msg.className = 'add-msg ok';
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display='none'; }, 2500);
+  } catch(e) {
+    msg.textContent = '⚠ 등록 중 오류가 발생했습니다.';
+    msg.className = 'add-msg err';
+    msg.style.display = 'block';
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '회차 등록';
+  }
+};
+
+window.deleteRound = async function(docId) {
+  if(!confirm('회차를 삭제하시겠습니까?')) return;
+  try {
+    await deleteDoc(doc(db, 'rounds', docId));
+    roundData = roundData.filter(x => x._id !== docId);
+    renderRounds();
+  } catch(e) {
+    alert('삭제 중 오류가 발생했습니다.');
+    console.error(e);
+  }
+};
+
 window.exportCSV = function() {
   const rows = [['성명','생년월일','등급','회차','필기점수','실습','상태','합격일']];
   allData.forEach(f => {

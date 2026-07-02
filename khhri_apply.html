@@ -206,9 +206,7 @@ body { font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:
         </div>
         <div class="fg"><label>응시 회차 <span>*</span></label>
           <select id="f-round">
-            <option value="">선택하세요</option>
-            <option value="3">제3회 (2026년 상반기)</option>
-            <option value="4">제4회 (2026년 하반기)</option>
+            <option value="">불러오는 중...</option>
           </select>
         </div>
       </div>
@@ -295,7 +293,7 @@ body { font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCjQ9mVRku1TxEEP3gVET_m7nXgvQK0_Jc",
@@ -308,6 +306,26 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
+
+// 회차 목록 Firebase에서 불러오기
+async function loadRounds() {
+  try {
+    const snap = await getDocs(collection(db, 'rounds'));
+    const rounds = snap.docs.map(d => d.data()).filter(r => r.status === '접수중');
+    rounds.sort((a,b) => Number(a.num) - Number(b.num));
+    const sel = document.getElementById('f-round');
+    if(rounds.length === 0) {
+      sel.innerHTML = '<option value="">현재 접수 중인 회차가 없습니다.</option>';
+    } else {
+      sel.innerHTML = '<option value="">선택하세요</option>' +
+        rounds.map(r => `<option value="${r.num}">${r.name}</option>`).join('');
+    }
+  } catch(e) {
+    document.getElementById('f-round').innerHTML = '<option value="">회차 로드 실패</option>';
+    console.error(e);
+  }
+}
+loadRounds();
 
 const GL = {'3':'원예임상전문가 3급','2':'원예임상전문가 2급','1':'원예임상전문가 1급','sv':'슈퍼바이저'};
 const RL = {'3':'제3회 (2026년 상반기)','4':'제4회 (2026년 하반기)'};
@@ -404,7 +422,8 @@ window.doSubmit = async function() {
     g('t-name').textContent   = name;
     g('t-birth').textContent  = bf;
     g('t-grade').textContent  = GL[grade];
-    g('t-round').textContent  = RL[round];
+    const roundSel = document.getElementById('f-round');
+    g('t-round').textContent  = roundSel.options[roundSel.selectedIndex].text;
     g('t-phone').textContent  = phone;
     g('t-date').textContent   = dateStr;
     console.log('수험표 채우기 완료, 화면 전환 시작');
