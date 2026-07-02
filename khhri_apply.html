@@ -397,6 +397,8 @@ window.doSubmit = async function() {
 
     // 수험표 채우기
     const bf = birth.slice(0,4)+'.'+birth.slice(4,6)+'.'+birth.slice(6,8);
+    console.log('저장 완료, 수험표 채우기 시작');
+    console.log('done-num 요소:', document.getElementById('done-num'));
     g('done-num').textContent = examNo;
     g('t-num').textContent    = examNo;
     g('t-name').textContent   = name;
@@ -405,8 +407,9 @@ window.doSubmit = async function() {
     g('t-round').textContent  = RL[round];
     g('t-phone').textContent  = phone;
     g('t-date').textContent   = dateStr;
-
+    console.log('수험표 채우기 완료, 화면 전환 시작');
     showSec('done');
+    console.log('화면 전환 완료');
 
   } catch(e) {
     showErr('err5', '⚠ 접수 중 오류가 발생했습니다. 다시 시도해주세요. ('+e.message+')');
