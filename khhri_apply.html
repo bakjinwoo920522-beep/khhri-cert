@@ -296,6 +296,8 @@ body { font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:
     </div>
   </div>
 
+
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -316,19 +318,7 @@ const db  = getFirestore(app);
 const GL = {'3':'원예임상전문가 3급','2':'원예임상전문가 2급','1':'원예임상전문가 1급','sv':'슈퍼바이저'};
 const RL = {'3':'제3회 (2026년 상반기)','4':'제4회 (2026년 하반기)'};
 
-
-window._GL = GL;
-window._RL = RL;
-window._addDoc = addDoc;
-window._collection = collection;
-</script>
-
-<script>
-const GL = {'3':'원예임상전문가 3급','2':'원예임상전문가 2급','1':'원예임상전문가 1급','sv':'슈퍼바이저'};
-const RL = {'3':'제3회 (2026년 상반기)','4':'제4회 (2026년 하반기)'};
-
 function goStep(n) {
-  // 1단계: 개인정보 동의 확인
   if(n === 2) {
     const agree = document.getElementById('f-agree').checked;
     if(!agree) {
@@ -337,7 +327,6 @@ function goStep(n) {
     }
     document.getElementById('err-1').style.display = 'none';
   }
-  // 2단계: 기본정보 확인
   if(n === 3) {
     const name  = document.getElementById('f-name').value.trim();
     const birth = document.getElementById('f-birth').value.trim();
@@ -355,7 +344,6 @@ function goStep(n) {
     }
     document.getElementById('err-2').style.display = 'none';
   }
-  // 3단계: 학력 확인
   if(n === 4) {
     const school = document.getElementById('f-school').value.trim();
     if(!school) {
@@ -364,7 +352,6 @@ function goStep(n) {
     }
     document.getElementById('err-3').style.display = 'none';
   }
-  // 4단계: 응시정보 확인 + 최종 요약
   if(n === 5) {
     const grade = document.getElementById('f-grade').value;
     const round = document.getElementById('f-round').value;
@@ -382,7 +369,6 @@ function goStep(n) {
       '<strong>응시 등급</strong>: ' + GL[grade] + '<br>' +
       '<strong>응시 회차</strong>: ' + RL[round];
   }
-
   document.querySelectorAll('.section').forEach(s => s.classList.remove('on'));
   document.getElementById('sec-'+n).classList.add('on');
   document.querySelectorAll('.step-nav').forEach((el, i) => {
@@ -407,7 +393,7 @@ async function doSubmit() {
   const examNo  = 'KHHRI-'+grade.toUpperCase()+'-'+round+'-'+birth.slice(2,6)+(Math.floor(Math.random()*9000)+1000);
 
   try {
-    await window.submitApplication({
+    await addDoc(collection(db, 'applications'), {
       name, birth,
       phone:    document.getElementById('f-phone').value.trim(),
       email:    document.getElementById('f-email').value.trim(),
@@ -440,13 +426,17 @@ async function doSubmit() {
 
   } catch(e) {
     const errEl = document.getElementById('err-submit');
-    errEl.textContent = '⚠ 접수 중 오류가 발생했습니다. 다시 시도해주세요.';
+    errEl.textContent = '⚠ 접수 중 오류가 발생했습니다. 다시 시도해주세요. (' + e.message + ')';
     errEl.style.display = 'block';
     console.error(e);
     btn.disabled = false;
     btn.textContent = '접수 완료 및 수험표 출력';
   }
 }
+
+// onclick에서 호출 가능하도록 전역 등록
+window.goStep    = goStep;
+window.doSubmit  = doSubmit;
 </script>
 </body>
 </html>
