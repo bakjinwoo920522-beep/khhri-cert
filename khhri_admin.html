@@ -211,6 +211,13 @@ tr:hover td { background:#fafafa; }
           <label>합격일</label>
           <input id="a-date" type="date" />
         </div>
+        <div class="fg">
+          <label>입금 확인</label>
+          <div class="toggle-wrap">
+            <button class="toggle-btn" id="paid-yes" onclick="setPaid(true)">✓ 입금확인</button>
+            <button class="toggle-btn" id="paid-no"  onclick="setPaid(false)">✗ 미입금</button>
+          </div>
+        </div>
         <button class="add-btn" id="add-btn" onclick="doAdd()">등록하기</button>
         <div class="add-msg" id="add-msg"></div>
       </div>
@@ -238,7 +245,7 @@ tr:hover td { background:#fafafa; }
           <table id="tbl" style="display:none">
             <thead>
               <tr>
-                <th>성명</th><th>등급</th><th>회차</th><th>필기</th><th>실습</th><th>상태</th><th>합격일</th><th></th>
+                <th>성명</th><th>등급</th><th>회차</th><th>필기</th><th>실습</th><th>입금</th><th>상태</th><th>합격일</th><th></th>
               </tr>
             </thead>
             <tbody id="list-body"></tbody>
@@ -292,7 +299,7 @@ tr:hover td { background:#fafafa; }
 <script type="module">
 import { initializeApp }                                    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // =============================================
 // 🔧 여기에 Firebase 설정값을 붙여넣으세요
@@ -473,6 +480,13 @@ window.setPrac = function(v) {
   document.getElementById('prac-fail').className = 'toggle-btn' + (v===false ? ' fail-on' : '');
 };
 
+let paidVal = false;
+window.setPaid = function(v) {
+  paidVal = v;
+  document.getElementById('paid-yes').className = 'toggle-btn' + (v===true  ? ' pass-on' : '');
+  document.getElementById('paid-no').className  = 'toggle-btn' + (v===false ? ' fail-on' : '');
+};
+
 // 등록
 window.doAdd = async function() {
   const name  = document.getElementById('a-name').value.trim();
@@ -501,9 +515,10 @@ window.doAdd = async function() {
     const docRef = await addDoc(collection(db, 'applicants'), {
       name, birth, grade, round, score,
       practical: pracVal,
+      paid: paidVal,
       date: date || ''
     });
-    allData.push({ _id: docRef.id, name, birth, grade, round, score, practical: pracVal, date: date||'' });
+    allData.push({ _id: docRef.id, name, birth, grade, round, score, practical: pracVal, paid: paidVal, date: date||'' });
     renderList();
     updateStats();
 
@@ -525,6 +540,19 @@ window.doAdd = async function() {
   } finally {
     btn.disabled=false;
     btn.textContent='등록하기';
+  }
+};
+
+// 입금확인 토글
+window.togglePaid = async function(docId, newVal) {
+  try {
+    await updateDoc(doc(db, 'applicants', docId), { paid: newVal });
+    const item = allData.find(x => x._id === docId);
+    if(item) item.paid = newVal;
+    renderList();
+  } catch(e) {
+    alert('오류가 발생했습니다.');
+    console.error(e);
   }
 };
 
@@ -580,9 +608,15 @@ window.renderList = function() {
       <td>제${f.round}회</td>
       <td>${f.score}점</td>
       <td>${pracBadge}</td>
+      <td>${f.paid===true ? '<span class="badge b-pass">확인</span>' : '<span class="badge b-partial">미확인</span>'}</td>
       <td>${badge}</td>
       <td>${f.date||'-'}</td>
-      <td><button class="del-btn" onclick="doDelete('${f._id}')">삭제</button></td>
+      <td>
+        <button class="del-btn" onclick="togglePaid('${f._id}', ${!f.paid})" style="margin-bottom:4px;${f.paid ? 'color:#888' : 'border-color:#2D5A27;color:#2D5A27'}">
+          ${f.paid ? '입금취소' : '입금확인'}
+        </button>
+        <button class="del-btn" onclick="doDelete('${f._id}')">삭제</button>
+      </td>
     </tr>`;
   }).join('');
 };

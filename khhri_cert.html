@@ -364,13 +364,16 @@ async function fetchRecord(name, birth, grade, round) {
   const q = query(
     collection(db, 'applicants'),
     where('name',  '==', name),
-    where('birth', '==', birth),
-    where('grade', '==', grade),
-    where('round', '==', round)
+    where('birth', '==', birth)
   );
   const snap = await getDocs(q);
   if(snap.empty) return null;
-  return snap.docs[0].data();
+  const doc = snap.docs.find(d => {
+    const data = d.data();
+    return data.grade === grade && data.round === round;
+  });
+  if(!doc) return null;
+  return doc.data();
 }
 
 // 합격 조회
@@ -472,6 +475,9 @@ window.doIssue = async function() {
     } else if(!f.practical) {
       show('issue-err');
       document.getElementById('issue-err').textContent='⚠ 실습평가를 통과하지 못해 자격증을 발급할 수 없습니다. 다음 회차 실습평가에 재응시해주세요.';
+    } else if(f.paid !== true) {
+      show('issue-err');
+      document.getElementById('issue-err').textContent='⚠ 응시료 입금 확인 중입니다. 입금 확인 후 자격증 발급이 가능합니다. 문의: 한국원예치유연구소';
     } else {
       // 자격증 발급
       const bf  = birth.slice(0,4)+'.'+birth.slice(4,6)+'.'+birth.slice(6,8);
