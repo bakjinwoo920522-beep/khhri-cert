@@ -273,7 +273,15 @@ body { font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:
         <tr><td>원예임상전문가 1급</td><td><strong>70,000원</strong></td><td><span class="pay-badge">추후 결제</span></td></tr>
         <tr><td>슈퍼바이저</td><td><strong>80,000원</strong></td><td><span class="pay-badge">추후 결제</span></td></tr>
       </table>
-      <div class="pay-notice">※ 응시료는 접수 완료 후 안내된 계좌로 입금해주세요.<br>※ 입금 확인 후 최종 접수가 완료됩니다.<br>※ 접수 취소 시 환불 규정에 따라 처리됩니다.</div>
+      <div style="background:#f0f7ee;border:1px solid #b8dba0;border-radius:10px;padding:16px 18px;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:700;color:#2D5A27;margin-bottom:10px;">💳 응시료 입금 계좌</div>
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:6px;font-size:13px;color:#1a1a18;line-height:1.8;">
+          <span style="color:#888;">은행</span><strong>기업은행</strong>
+          <span style="color:#888;">계좌번호</span><strong>658-037885-01-010</strong>
+          <span style="color:#888;">예금주</span><strong>박진우(한국원예치유연구소)</strong>
+        </div>
+      </div>
+      <div class="pay-notice">※ 접수 완료 후 위 계좌로 응시료를 입금해주세요.<br>※ 입금 시 이름을 반드시 기재해주세요.<br>※ 입금 확인 후 최종 접수가 완료됩니다.<br>※ 접수 취소 시 환불 규정에 따라 처리됩니다.</div>
     </div>
     <div id="err-4" class="err">⚠ 응시 등급과 회차를 선택해주세요.</div>
     <div class="btn-row">
@@ -297,6 +305,46 @@ body { font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:
   </div>
 
 
+
+
+  <!-- 완료 화면 -->
+  <div class="section" id="sec-done">
+    <div class="done-wrap">
+      <div class="done-icon">🎉</div>
+      <div class="done-title">접수가 완료되었습니다!</div>
+      <div class="done-sub">아래 수험번호를 꼭 저장해두세요.<br>수험표를 출력하여 시험 당일 지참해주세요.</div>
+      <div class="done-num" id="done-num">-</div>
+    </div>
+    <div class="ticket on" id="ticket">
+      <div class="ticket-wm">KHHRI</div>
+      <div class="ticket-header">
+        <div class="ticket-logo">
+          <div class="ticket-logo-ic"><svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg></div>
+          <span class="ticket-org">한국원예치유연구소 · KHHRI</span>
+        </div>
+        <div class="ticket-line"></div>
+        <div class="ticket-title">수 험 표</div>
+        <div class="ticket-sub">원예임상전문가 자격검정</div>
+      </div>
+      <div class="ticket-num-label">수험번호</div>
+      <div class="ticket-num" id="t-num">-</div>
+      <div class="ticket-grid">
+        <div class="ticket-item"><label>성명</label><span id="t-name">-</span></div>
+        <div class="ticket-item"><label>생년월일</label><span id="t-birth">-</span></div>
+        <div class="ticket-item"><label>응시 등급</label><span id="t-grade">-</span></div>
+        <div class="ticket-item"><label>응시 회차</label><span id="t-round">-</span></div>
+        <div class="ticket-item"><label>연락처</label><span id="t-phone">-</span></div>
+        <div class="ticket-item"><label>접수일</label><span id="t-date">-</span></div>
+      </div>
+      <div class="ticket-notice">
+        📌 시험 당일 본 수험표와 신분증을 반드시 지참해주세요.<br>
+        📌 응시료 입금 후 최종 접수가 완료됩니다.<br>
+        📌 문의: 한국원예치유연구소 (jinwoostory.com)
+      </div>
+      <div class="ticket-footer">한국원예치유연구소 · Korea Horticultural Healing Research Institute</div>
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨️ 수험표 출력하기</button>
+  </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
