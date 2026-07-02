@@ -7,242 +7,191 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#f5f5f3; color:#1a1a18; }
-
-/* 네비 */
-.nav { display:flex; align-items:center; justify-content:space-between; padding:14px 32px; background:#fff; border-bottom:1px solid #e8e8e4; position:sticky; top:0; z-index:10; }
-.logo { display:flex; align-items:center; gap:10px; }
-.logo-icon { width:34px; height:34px; border-radius:8px; background:#2D5A27; display:flex; align-items:center; justify-content:center; }
-.logo-icon svg { width:18px; height:18px; fill:#fff; }
-.logo-text { font-size:14px; font-weight:600; color:#1a1a18; }
-.logo-sub { font-size:11px; color:#888; }
-
-/* 페이지 */
-.wrap { max-width:680px; margin:0 auto; padding:40px 20px; }
+.nav { display:flex; align-items:center; gap:10px; padding:14px 28px; background:#fff; border-bottom:1px solid #e8e8e4; }
+.nav-icon { width:34px; height:34px; border-radius:8px; background:#2D5A27; display:flex; align-items:center; justify-content:center; }
+.nav-icon svg { width:18px; height:18px; fill:#fff; }
+.nav-text { font-size:14px; font-weight:600; }
+.nav-sub { font-size:11px; color:#888; }
+.wrap { max-width:680px; margin:0 auto; padding:36px 20px; }
 .pg-title { font-size:22px; font-weight:700; margin-bottom:6px; }
-.pg-sub { font-size:14px; color:#666; line-height:1.7; margin-bottom:32px; }
+.pg-sub { font-size:14px; color:#666; line-height:1.7; margin-bottom:28px; }
 
-/* 단계 표시 */
-.steps-nav { display:flex; gap:0; margin-bottom:32px; }
-.step-nav { flex:1; text-align:center; position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; }
-.step-nav:not(:last-child)::after { content:''; position:absolute; top:15px; left:60%; right:-40%; height:2px; background:#e8e8e4; }
-.step-nav.done::after { background:#2D5A27; }
-.sn-circle { width:32px; height:32px; border-radius:50%; background:#e8e8e4; color:#888; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; z-index:1; transition:all 0.2s; }
-.step-nav.on .sn-circle { background:#2D5A27; color:#fff; }
-.step-nav.done .sn-circle { background:#2D5A27; color:#fff; }
-.sn-label { font-size:11px; color:#aaa; }
-.step-nav.on .sn-label { color:#2D5A27; font-weight:600; }
-.step-nav.done .sn-label { color:#2D5A27; }
+/* 단계 */
+.steps-nav { display:flex; margin-bottom:28px; }
+.sn { flex:1; text-align:center; position:relative; display:flex; flex-direction:column; align-items:center; gap:5px; }
+.sn:not(:last-child)::after { content:''; position:absolute; top:15px; left:60%; right:-40%; height:2px; background:#e8e8e4; z-index:0; }
+.sn.done::after { background:#2D5A27; }
+.sn-c { width:32px; height:32px; border-radius:50%; background:#e8e8e4; color:#888; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; z-index:1; }
+.sn.on .sn-c { background:#2D5A27; color:#fff; }
+.sn.done .sn-c { background:#2D5A27; color:#fff; }
+.sn-l { font-size:10px; color:#aaa; }
+.sn.on .sn-l { color:#2D5A27; font-weight:600; }
+.sn.done .sn-l { color:#2D5A27; }
 
 /* 섹션 */
-.section { display:none; }
-.section.on { display:block; }
+.sec { display:none; }
+.sec.on { display:block; }
 
 /* 박스 */
-.box { background:#fff; border:1px solid #e8e8e4; border-radius:14px; padding:24px; margin-bottom:16px; }
-.box-title { font-size:14px; font-weight:700; margin-bottom:18px; color:#1a1a18; display:flex; align-items:center; gap:6px; }
-
-/* 폼 */
-.row2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
-.row1 { margin-bottom:14px; }
-.fg { display:flex; flex-direction:column; gap:6px; }
+.box { background:#fff; border:1px solid #e8e8e4; border-radius:14px; padding:22px; margin-bottom:14px; }
+.box-title { font-size:14px; font-weight:700; margin-bottom:16px; }
+.row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.row1 { margin-bottom:12px; }
+.fg { display:flex; flex-direction:column; gap:5px; }
 .fg label { font-size:12px; color:#888; font-weight:500; }
 .fg label span { color:#c0392b; }
-.fg input, .fg select, .fg textarea { padding:10px 13px; border-radius:8px; border:1px solid #ddd; background:#fafafa; color:#1a1a18; font-size:14px; outline:none; transition:border 0.15s; width:100%; }
+.fg input, .fg select, .fg textarea { padding:10px 12px; border-radius:8px; border:1px solid #ddd; background:#fafafa; color:#1a1a18; font-size:14px; outline:none; width:100%; }
 .fg input:focus, .fg select:focus, .fg textarea:focus { border-color:#2D5A27; background:#fff; }
-.fg textarea { height:80px; resize:none; line-height:1.6; }
+.fg textarea { height:80px; resize:none; }
 
-/* 개인정보 동의 */
-.agree-box { background:#f7f7f5; border:1px solid #e8e8e4; border-radius:8px; padding:14px 16px; font-size:12px; color:#666; line-height:1.8; height:120px; overflow-y:auto; margin-bottom:10px; }
-.agree-check { display:flex; align-items:center; gap:8px; font-size:13px; color:#1a1a18; cursor:pointer; }
-.agree-check input { width:16px; height:16px; accent-color:#2D5A27; cursor:pointer; }
+/* 동의 */
+.agree-box { background:#f7f7f5; border:1px solid #e8e8e4; border-radius:8px; padding:14px; font-size:12px; color:#666; line-height:1.8; height:130px; overflow-y:auto; margin-bottom:10px; }
+.agree-chk { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; }
+.agree-chk input { width:16px; height:16px; accent-color:#2D5A27; cursor:pointer; }
 
-/* 결제 안내 */
-.pay-table { width:100%; border-collapse:collapse; font-size:13px; }
-.pay-table th { padding:10px 14px; background:#f7f7f5; border:1px solid #e8e8e4; font-size:12px; color:#666; font-weight:600; text-align:left; }
-.pay-table td { padding:10px 14px; border:1px solid #e8e8e4; color:#1a1a18; }
-.pay-notice { font-size:12px; color:#888; margin-top:10px; line-height:1.7; }
+/* 결제 */
+.pay-table { width:100%; border-collapse:collapse; font-size:13px; margin-bottom:12px; }
+.pay-table th { padding:9px 12px; background:#f7f7f5; border:1px solid #e8e8e4; font-size:11px; color:#666; font-weight:600; text-align:left; }
+.pay-table td { padding:9px 12px; border:1px solid #e8e8e4; }
 .pay-badge { display:inline-block; background:#fff4e0; color:#a06000; font-size:11px; font-weight:600; padding:2px 8px; border-radius:4px; }
+.bank-box { background:#f0f7ee; border:1px solid #b8dba0; border-radius:10px; padding:14px 16px; margin-bottom:10px; }
+.bank-title { font-size:13px; font-weight:700; color:#2D5A27; margin-bottom:8px; }
+.bank-grid { display:grid; grid-template-columns:70px 1fr; gap:4px; font-size:13px; line-height:1.8; }
+.bank-grid span { color:#888; }
+.pay-notice { font-size:12px; color:#888; line-height:1.8; }
 
 /* 버튼 */
-.btn-row { display:flex; gap:10px; margin-top:20px; }
+.btn-row { display:flex; gap:10px; margin-top:16px; }
 .btn-prev { flex:1; padding:12px; border-radius:8px; border:1px solid #ddd; background:#fff; color:#555; font-size:14px; font-weight:600; cursor:pointer; }
 .btn-next { flex:2; padding:12px; border-radius:8px; border:none; background:#2D5A27; color:#fff; font-size:14px; font-weight:600; cursor:pointer; }
-.btn-next:hover { background:#245020; }
 .btn-next:disabled { background:#aaa; cursor:not-allowed; }
-.btn-full { width:100%; padding:12px; border-radius:8px; border:none; background:#2D5A27; color:#fff; font-size:14px; font-weight:600; cursor:pointer; margin-top:20px; }
-.btn-full:hover { background:#245020; }
-
-/* 로딩 */
-.spinner { display:inline-block; width:16px; height:16px; border:2px solid #fff; border-top-color:transparent; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:6px; }
+.err { font-size:12px; color:#c0392b; margin-top:8px; display:none; }
+.spinner { display:inline-block; width:14px; height:14px; border:2px solid #fff; border-top-color:transparent; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:6px; }
 @keyframes spin { to { transform:rotate(360deg); } }
 
-/* 오류 */
-.err { font-size:12px; color:#c0392b; margin-top:6px; display:none; }
-
-/* 완료 화면 */
-.done-wrap { text-align:center; padding:40px 20px; }
-.done-icon { font-size:48px; margin-bottom:16px; }
-.done-title { font-size:22px; font-weight:700; margin-bottom:8px; }
-.done-sub { font-size:14px; color:#666; line-height:1.7; margin-bottom:32px; }
-.done-num { font-size:28px; font-weight:700; color:#2D5A27; margin:16px 0; }
-
-/* 수험표 */
-.ticket {
-  border:2px solid #2D5A27; border-radius:14px;
-  padding:32px; max-width:480px; margin:0 auto;
-  background:#fff; position:relative; overflow:hidden;
-  display:none;
-}
-.ticket.on { display:block; }
-.ticket-wm {
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-50%) rotate(-25deg);
-  font-size:60px; opacity:0.04; color:#2D5A27;
-  font-weight:900; pointer-events:none;
-  white-space:nowrap;
-}
-.ticket-header { text-align:center; margin-bottom:24px; }
-.ticket-logo { display:flex; align-items:center; justify-content:center; gap:7px; margin-bottom:10px; }
-.ticket-logo-ic { width:26px; height:26px; border-radius:5px; background:#2D5A27; display:flex; align-items:center; justify-content:center; }
-.ticket-logo-ic svg { width:13px; height:13px; fill:#fff; }
-.ticket-org { font-size:11px; color:#888; }
-.ticket-line { width:48px; height:2px; background:#2D5A27; margin:10px auto; }
-.ticket-title { font-size:20px; font-weight:700; letter-spacing:4px; color:#1a1a18; }
-.ticket-sub { font-size:12px; color:#666; margin-top:4px; }
-.ticket-num-label { font-size:11px; color:#888; text-align:center; margin-bottom:4px; }
-.ticket-num { font-size:26px; font-weight:700; color:#2D5A27; text-align:center; letter-spacing:4px; margin-bottom:20px; }
-.ticket-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
-.ticket-item { background:#f7f7f5; border-radius:8px; padding:10px 13px; }
-.ticket-item label { font-size:10px; color:#999; display:block; margin-bottom:3px; }
-.ticket-item span { font-size:13px; font-weight:600; color:#1a1a18; }
-.ticket-notice { background:#e8f5e0; border-radius:8px; padding:12px 14px; font-size:12px; color:#2D6A1F; line-height:1.7; }
-.ticket-footer { text-align:center; margin-top:16px; border-top:1px solid #e8e8e4; padding-top:14px; font-size:11px; color:#aaa; }
-
-.print-btn { width:100%; max-width:480px; display:block; margin:16px auto 0; padding:12px; border-radius:8px; background:#2D5A27; color:#fff; border:none; font-size:14px; font-weight:600; cursor:pointer; }
+/* 완료/수험표 */
+.done-top { text-align:center; padding:32px 20px 20px; }
+.done-icon { font-size:44px; margin-bottom:12px; }
+.done-title { font-size:20px; font-weight:700; margin-bottom:6px; }
+.done-sub { font-size:13px; color:#666; line-height:1.7; margin-bottom:16px; }
+.done-num { font-size:26px; font-weight:700; color:#2D5A27; }
+.ticket { border:2px solid #2D5A27; border-radius:14px; padding:28px; max-width:480px; margin:0 auto 16px; background:#fff; position:relative; overflow:hidden; }
+.ticket-wm { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-25deg); font-size:56px; opacity:0.04; color:#2D5A27; font-weight:900; pointer-events:none; white-space:nowrap; }
+.t-header { text-align:center; margin-bottom:20px; }
+.t-logo { display:flex; align-items:center; justify-content:center; gap:7px; margin-bottom:10px; }
+.t-logo-ic { width:24px; height:24px; border-radius:5px; background:#2D5A27; display:flex; align-items:center; justify-content:center; }
+.t-logo-ic svg { width:12px; height:12px; fill:#fff; }
+.t-org { font-size:11px; color:#888; }
+.t-line { width:44px; height:2px; background:#2D5A27; margin:10px auto; }
+.t-title { font-size:19px; font-weight:700; letter-spacing:4px; }
+.t-sub { font-size:11px; color:#666; margin-top:3px; }
+.t-num-label { font-size:11px; color:#888; text-align:center; margin-bottom:3px; }
+.t-num { font-size:22px; font-weight:700; color:#2D5A27; text-align:center; letter-spacing:3px; margin-bottom:16px; }
+.t-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+.t-item { background:#f7f7f5; border-radius:7px; padding:9px 12px; }
+.t-item label { font-size:10px; color:#999; display:block; margin-bottom:2px; }
+.t-item span { font-size:13px; font-weight:600; }
+.t-notice { background:#e8f5e0; border-radius:8px; padding:12px 14px; font-size:12px; color:#2D6A1F; line-height:1.7; }
+.t-footer { text-align:center; margin-top:14px; border-top:1px solid #e8e8e4; padding-top:12px; font-size:11px; color:#aaa; }
+.print-btn { width:100%; max-width:480px; display:block; margin:0 auto; padding:12px; border-radius:8px; background:#2D5A27; color:#fff; border:none; font-size:14px; font-weight:600; cursor:pointer; }
 
 @media print {
-  .nav, .wrap > *:not(.section), .btn-row, .print-btn, .done-wrap > *:not(.ticket) { display:none !important; }
-  .ticket { border:2px solid #2D5A27 !important; }
+  .nav, .pg-title, .pg-sub, .steps-nav, .done-top, .print-btn { display:none !important; }
   body { background:#fff; }
+  .ticket { border:2px solid #2D5A27 !important; max-width:100%; }
 }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <div class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
-    </div>
-    <div>
-      <div class="logo-text">한국원예치유연구소</div>
-      <div class="logo-sub">Korea Horticultural Healing Research Institute</div>
-    </div>
-  </div>
+  <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg></div>
+  <div><div class="nav-text">한국원예치유연구소</div><div class="nav-sub">Korea Horticultural Healing Research Institute</div></div>
 </nav>
 
 <div class="wrap">
   <div class="pg-title">원예임상전문가 응시원서</div>
-  <div class="pg-sub">원예임상전문가 자격검정 응시원서를 작성해주세요.<br>모든 항목은 정확하게 입력해주세요.</div>
+  <div class="pg-sub">원예임상전문가 자격검정 응시원서를 작성해주세요.</div>
 
-  <!-- 단계 표시 -->
   <div class="steps-nav">
-    <div class="step-nav on" id="snav-1"><div class="sn-circle">1</div><div class="sn-label">개인정보동의</div></div>
-    <div class="step-nav" id="snav-2"><div class="sn-circle">2</div><div class="sn-label">기본정보</div></div>
-    <div class="step-nav" id="snav-3"><div class="sn-circle">3</div><div class="sn-label">학력·경력</div></div>
-    <div class="step-nav" id="snav-4"><div class="sn-circle">4</div><div class="sn-label">응시정보</div></div>
-    <div class="step-nav" id="snav-5"><div class="sn-circle">5</div><div class="sn-label">제출·수험표</div></div>
+    <div class="sn on" id="sn1"><div class="sn-c">1</div><div class="sn-l">개인정보동의</div></div>
+    <div class="sn" id="sn2"><div class="sn-c">2</div><div class="sn-l">기본정보</div></div>
+    <div class="sn" id="sn3"><div class="sn-c">3</div><div class="sn-l">학력·경력</div></div>
+    <div class="sn" id="sn4"><div class="sn-c">4</div><div class="sn-l">응시정보</div></div>
+    <div class="sn" id="sn5"><div class="sn-c">5</div><div class="sn-l">최종확인</div></div>
   </div>
 
   <!-- 1단계: 개인정보 동의 -->
-  <div class="section on" id="sec-1">
+  <div class="sec on" id="sec1">
     <div class="box">
       <div class="box-title">🔒 개인정보 수집·이용 동의</div>
       <div class="agree-box">
-        한국원예치유연구소(이하 "연구소")는 원예임상전문가 자격검정 응시원서 접수를 위해 아래와 같이 개인정보를 수집·이용합니다.<br><br>
-        <strong>1. 수집 항목</strong><br>
-        성명, 생년월일, 연락처, 이메일, 주소, 학력, 경력, 보유 자격증<br><br>
-        <strong>2. 수집·이용 목적</strong><br>
-        자격검정 응시 접수, 수험표 발급, 합격 여부 통보, 자격증 발급<br><br>
-        <strong>3. 보유·이용 기간</strong><br>
-        자격 취득일로부터 5년간 보유 후 파기<br><br>
-        <strong>4. 동의 거부 권리</strong><br>
-        개인정보 수집·이용에 동의하지 않을 권리가 있으나, 동의 거부 시 자격검정 응시 접수가 불가합니다.
+        한국원예치유연구소는 원예임상전문가 자격검정 응시원서 접수를 위해 아래와 같이 개인정보를 수집·이용합니다.<br><br>
+        <strong>1. 수집 항목</strong><br>성명, 생년월일, 연락처, 이메일, 주소, 학력, 경력, 보유 자격증<br><br>
+        <strong>2. 수집·이용 목적</strong><br>자격검정 응시 접수, 수험표 발급, 합격 여부 통보, 자격증 발급<br><br>
+        <strong>3. 보유·이용 기간</strong><br>자격 취득일로부터 5년간 보유 후 파기<br><br>
+        <strong>4. 동의 거부 권리</strong><br>동의 거부 시 자격검정 응시 접수가 불가합니다.
       </div>
-      <label class="agree-check">
-        <input type="checkbox" id="f-agree" />
-        위 개인정보 수집·이용에 동의합니다. (필수)
-      </label>
+      <label class="agree-chk"><input type="checkbox" id="f-agree"> 위 개인정보 수집·이용에 동의합니다. (필수)</label>
     </div>
-    <div id="err-1" class="err">⚠ 개인정보 수집·이용에 동의해주세요.</div>
-    <div class="btn-row">
-      <button class="btn-next" onclick="goStep(2)">다음 단계 →</button>
-    </div>
+    <div id="err1" class="err">⚠ 개인정보 수집·이용에 동의해주세요.</div>
+    <div class="btn-row"><button class="btn-next" onclick="goNext(1)">다음 단계 →</button></div>
   </div>
 
   <!-- 2단계: 기본정보 -->
-  <div class="section" id="sec-2">
+  <div class="sec" id="sec2">
     <div class="box">
       <div class="box-title">👤 기본 정보</div>
       <div class="row2">
-        <div class="fg"><label>성명 <span>*</span></label><input id="f-name" placeholder="홍길동" /></div>
-        <div class="fg"><label>생년월일 <span>*</span></label><input id="f-birth" placeholder="19901215" maxlength="8" /></div>
+        <div class="fg"><label>성명 <span>*</span></label><input id="f-name" placeholder="홍길동"></div>
+        <div class="fg"><label>생년월일 <span>*</span></label><input id="f-birth" placeholder="19901215" maxlength="8"></div>
       </div>
       <div class="row2">
-        <div class="fg"><label>연락처 <span>*</span></label><input id="f-phone" placeholder="010-0000-0000" /></div>
-        <div class="fg"><label>이메일 <span>*</span></label><input id="f-email" placeholder="example@email.com" /></div>
+        <div class="fg"><label>연락처 <span>*</span></label><input id="f-phone" placeholder="010-0000-0000"></div>
+        <div class="fg"><label>이메일 <span>*</span></label><input id="f-email" placeholder="example@email.com"></div>
       </div>
-      <div class="row1">
-        <div class="fg"><label>주소</label><input id="f-addr" placeholder="거주 주소 입력" /></div>
-      </div>
+      <div class="row1"><div class="fg"><label>주소</label><input id="f-addr" placeholder="거주 주소"></div></div>
     </div>
-    <div id="err-2" class="err">⚠ 필수 항목을 모두 입력해주세요.</div>
+    <div id="err2" class="err">⚠ 필수 항목을 모두 입력해주세요.</div>
     <div class="btn-row">
-      <button class="btn-prev" onclick="goStep(1)">← 이전</button>
-      <button class="btn-next" onclick="goStep(3)">다음 단계 →</button>
+      <button class="btn-prev" onclick="goPrev(1)">← 이전</button>
+      <button class="btn-next" onclick="goNext(2)">다음 단계 →</button>
     </div>
   </div>
 
   <!-- 3단계: 학력·경력 -->
-  <div class="section" id="sec-3">
+  <div class="sec" id="sec3">
     <div class="box">
       <div class="box-title">🎓 최종 학력</div>
       <div class="row2">
-        <div class="fg"><label>학교명 <span>*</span></label><input id="f-school" placeholder="OO대학교" /></div>
-        <div class="fg"><label>전공</label><input id="f-major" placeholder="원예학과" /></div>
+        <div class="fg"><label>학교명 <span>*</span></label><input id="f-school" placeholder="OO대학교"></div>
+        <div class="fg"><label>전공</label><input id="f-major" placeholder="원예학과"></div>
       </div>
       <div class="row2">
         <div class="fg"><label>학위</label>
           <select id="f-degree">
             <option value="">선택</option>
-            <option>고등학교 졸업</option>
-            <option>전문학사</option>
-            <option>학사</option>
-            <option>석사</option>
-            <option>박사</option>
+            <option>고등학교 졸업</option><option>전문학사</option>
+            <option>학사</option><option>석사</option><option>박사</option>
           </select>
         </div>
-        <div class="fg"><label>졸업연도</label><input id="f-grad-year" placeholder="2015" maxlength="4" /></div>
+        <div class="fg"><label>졸업연도</label><input id="f-gradyear" placeholder="2015" maxlength="4"></div>
       </div>
     </div>
     <div class="box">
       <div class="box-title">💼 관련 경력</div>
-      <div class="row1">
-        <div class="fg"><label>주요 경력 (선택)</label><textarea id="f-career" placeholder="예) 박진우원예치료센터 원예치료사 3년&#10;OO복지관 원예치료 프로그램 진행 2년"></textarea></div>
-      </div>
-      <div class="row1">
-        <div class="fg"><label>보유 자격증 (선택)</label><input id="f-license" placeholder="예) 원예치료사 2급, 사회복지사 1급" /></div>
-      </div>
+      <div class="row1"><div class="fg"><label>주요 경력 (선택)</label><textarea id="f-career" placeholder="예) OO센터 원예치료사 3년"></textarea></div></div>
+      <div class="row1"><div class="fg"><label>보유 자격증 (선택)</label><input id="f-license" placeholder="예) 원예치료사 2급"></div></div>
     </div>
-    <div id="err-3" class="err">⚠ 학교명을 입력해주세요.</div>
+    <div id="err3" class="err">⚠ 학교명을 입력해주세요.</div>
     <div class="btn-row">
-      <button class="btn-prev" onclick="goStep(2)">← 이전</button>
-      <button class="btn-next" onclick="goStep(4)">다음 단계 →</button>
+      <button class="btn-prev" onclick="goPrev(2)">← 이전</button>
+      <button class="btn-next" onclick="goNext(3)">다음 단계 →</button>
     </div>
   </div>
 
   <!-- 4단계: 응시정보 -->
-  <div class="section" id="sec-4">
+  <div class="sec" id="sec4">
     <div class="box">
       <div class="box-title">📋 응시 정보</div>
       <div class="row2">
@@ -268,80 +217,81 @@ body { font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:
       <div class="box-title">💳 응시료 안내</div>
       <table class="pay-table">
         <tr><th>등급</th><th>응시료</th><th>비고</th></tr>
-        <tr><td>원예임상전문가 3급</td><td><strong>50,000원</strong></td><td><span class="pay-badge">추후 결제</span></td></tr>
-        <tr><td>원예임상전문가 2급</td><td><strong>60,000원</strong></td><td><span class="pay-badge">추후 결제</span></td></tr>
-        <tr><td>원예임상전문가 1급</td><td><strong>70,000원</strong></td><td><span class="pay-badge">추후 결제</span></td></tr>
-        <tr><td>슈퍼바이저</td><td><strong>80,000원</strong></td><td><span class="pay-badge">추후 결제</span></td></tr>
+        <tr><td>원예임상전문가 3급</td><td><strong>50,000원</strong></td><td><span class="pay-badge">계좌입금</span></td></tr>
+        <tr><td>원예임상전문가 2급</td><td><strong>60,000원</strong></td><td><span class="pay-badge">계좌입금</span></td></tr>
+        <tr><td>원예임상전문가 1급</td><td><strong>70,000원</strong></td><td><span class="pay-badge">계좌입금</span></td></tr>
+        <tr><td>슈퍼바이저</td><td><strong>80,000원</strong></td><td><span class="pay-badge">계좌입금</span></td></tr>
       </table>
-      <div style="background:#f0f7ee;border:1px solid #b8dba0;border-radius:10px;padding:16px 18px;margin-bottom:12px;">
-        <div style="font-size:13px;font-weight:700;color:#2D5A27;margin-bottom:10px;">💳 응시료 입금 계좌</div>
-        <div style="display:grid;grid-template-columns:80px 1fr;gap:6px;font-size:13px;color:#1a1a18;line-height:1.8;">
-          <span style="color:#888;">은행</span><strong>기업은행</strong>
-          <span style="color:#888;">계좌번호</span><strong>658-037885-01-010</strong>
-          <span style="color:#888;">예금주</span><strong>박진우(한국원예치유연구소)</strong>
+      <div class="bank-box">
+        <div class="bank-title">💳 응시료 입금 계좌</div>
+        <div class="bank-grid">
+          <span>은행</span><strong>기업은행</strong>
+          <span>계좌번호</span><strong>658-037885-01-010</strong>
+          <span>예금주</span><strong>박진우(한국원예치유연구소)</strong>
         </div>
       </div>
-      <div class="pay-notice">※ 접수 완료 후 위 계좌로 응시료를 입금해주세요.<br>※ 입금 시 이름을 반드시 기재해주세요.<br>※ 입금 확인 후 최종 접수가 완료됩니다.<br>※ 접수 취소 시 환불 규정에 따라 처리됩니다.</div>
+      <div class="pay-notice">※ 접수 완료 후 위 계좌로 응시료를 입금해주세요.<br>※ 입금 시 성함을 반드시 기재해주세요.<br>※ 입금 확인 후 최종 접수가 완료됩니다.</div>
     </div>
-    <div id="err-4" class="err">⚠ 응시 등급과 회차를 선택해주세요.</div>
+    <div id="err4" class="err">⚠ 응시 등급과 회차를 선택해주세요.</div>
     <div class="btn-row">
-      <button class="btn-prev" onclick="goStep(3)">← 이전</button>
-      <button class="btn-next" onclick="goStep(5)">다음 단계 →</button>
+      <button class="btn-prev" onclick="goPrev(3)">← 이전</button>
+      <button class="btn-next" onclick="goNext(4)">다음 단계 →</button>
     </div>
   </div>
 
-  <!-- 5단계: 최종 확인 및 제출 -->
-  <div class="section" id="sec-5">
+  <!-- 5단계: 최종 확인 -->
+  <div class="sec" id="sec5">
     <div class="box">
       <div class="box-title">✅ 접수 내용 확인</div>
-      <div id="confirm-summary" style="font-size:13px;color:#666;line-height:2;"></div>
+      <div id="summary" style="font-size:13px;color:#555;line-height:2;"></div>
     </div>
-    <div id="err-5" class="err"></div>
-    <div id="err-submit" class="err"></div>
+    <div id="err5" class="err"></div>
     <div class="btn-row">
-      <button class="btn-prev" onclick="goStep(4)">← 이전</button>
+      <button class="btn-prev" onclick="goPrev(4)">← 이전</button>
       <button class="btn-next" id="submit-btn" onclick="doSubmit()">접수 완료 및 수험표 출력</button>
     </div>
+  </div>
 
   <!-- 완료 화면 -->
-  <div class="section" id="sec-done">
-    <div class="done-wrap">
+  <div class="sec" id="sec-done">
+    <div class="done-top">
       <div class="done-icon">🎉</div>
       <div class="done-title">접수가 완료되었습니다!</div>
       <div class="done-sub">아래 수험번호를 꼭 저장해두세요.<br>수험표를 출력하여 시험 당일 지참해주세요.</div>
       <div class="done-num" id="done-num">-</div>
     </div>
-    <div class="ticket on" id="ticket">
+    <div class="ticket">
       <div class="ticket-wm">KHHRI</div>
-      <div class="ticket-header">
-        <div class="ticket-logo">
-          <div class="ticket-logo-ic"><svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg></div>
-          <span class="ticket-org">한국원예치유연구소 · KHHRI</span>
+      <div class="t-header">
+        <div class="t-logo">
+          <div class="t-logo-ic"><svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg></div>
+          <span class="t-org">한국원예치유연구소 · KHHRI</span>
         </div>
-        <div class="ticket-line"></div>
-        <div class="ticket-title">수 험 표</div>
-        <div class="ticket-sub">원예임상전문가 자격검정</div>
+        <div class="t-line"></div>
+        <div class="t-title">수 험 표</div>
+        <div class="t-sub">원예임상전문가 자격검정</div>
       </div>
-      <div class="ticket-num-label">수험번호</div>
-      <div class="ticket-num" id="t-num">-</div>
-      <div class="ticket-grid">
-        <div class="ticket-item"><label>성명</label><span id="t-name">-</span></div>
-        <div class="ticket-item"><label>생년월일</label><span id="t-birth">-</span></div>
-        <div class="ticket-item"><label>응시 등급</label><span id="t-grade">-</span></div>
-        <div class="ticket-item"><label>응시 회차</label><span id="t-round">-</span></div>
-        <div class="ticket-item"><label>연락처</label><span id="t-phone">-</span></div>
-        <div class="ticket-item"><label>접수일</label><span id="t-date">-</span></div>
+      <div class="t-num-label">수험번호</div>
+      <div class="t-num" id="t-num">-</div>
+      <div class="t-grid">
+        <div class="t-item"><label>성명</label><span id="t-name">-</span></div>
+        <div class="t-item"><label>생년월일</label><span id="t-birth">-</span></div>
+        <div class="t-item"><label>응시 등급</label><span id="t-grade">-</span></div>
+        <div class="t-item"><label>응시 회차</label><span id="t-round">-</span></div>
+        <div class="t-item"><label>연락처</label><span id="t-phone">-</span></div>
+        <div class="t-item"><label>접수일</label><span id="t-date">-</span></div>
       </div>
-      <div class="ticket-notice">
+      <div class="t-notice">
         📌 시험 당일 본 수험표와 신분증을 반드시 지참해주세요.<br>
         📌 응시료 입금 후 최종 접수가 완료됩니다.<br>
         📌 문의: 한국원예치유연구소 (jinwoostory.com)
       </div>
-      <div class="ticket-footer">한국원예치유연구소 · Korea Horticultural Healing Research Institute</div>
+      <div class="t-footer">한국원예치유연구소 · Korea Horticultural Healing Research Institute</div>
     </div>
     <button class="print-btn" onclick="window.print()">🖨️ 수험표 출력하기</button>
   </div>
-</div>
+
+</div><!-- /wrap -->
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -353,8 +303,7 @@ const firebaseConfig = {
   projectId: "khhri-cert",
   storageBucket: "khhri-cert.firebasestorage.app",
   messagingSenderId: "264415215694",
-  appId: "1:264415215694:web:3416d7c2852fee31fe431f",
-  measurementId: "G-SFZQG3QW6X"
+  appId: "1:264415215694:web:3416d7c2852fee31fe431f"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -363,125 +312,109 @@ const db  = getFirestore(app);
 const GL = {'3':'원예임상전문가 3급','2':'원예임상전문가 2급','1':'원예임상전문가 1급','sv':'슈퍼바이저'};
 const RL = {'3':'제3회 (2026년 상반기)','4':'제4회 (2026년 하반기)'};
 
-function goStep(n) {
-  if(n === 2) {
-    const agree = document.getElementById('f-agree').checked;
-    if(!agree) {
-      document.getElementById('err-1').style.display = 'block';
-      return;
-    }
-    document.getElementById('err-1').style.display = 'none';
-  }
-  if(n === 3) {
-    const name  = document.getElementById('f-name').value.trim();
-    const birth = document.getElementById('f-birth').value.trim();
-    const phone = document.getElementById('f-phone').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    if(!name || !birth || !phone || !email) {
-      document.getElementById('err-2').textContent = '⚠ 필수 항목을 모두 입력해주세요.';
-      document.getElementById('err-2').style.display = 'block';
-      return;
-    }
-    if(birth.length !== 8 || isNaN(Number(birth))) {
-      document.getElementById('err-2').textContent = '⚠ 생년월일을 8자리 숫자로 입력해주세요.';
-      document.getElementById('err-2').style.display = 'block';
-      return;
-    }
-    document.getElementById('err-2').style.display = 'none';
-  }
-  if(n === 4) {
-    const school = document.getElementById('f-school').value.trim();
-    if(!school) {
-      document.getElementById('err-3').style.display = 'block';
-      return;
-    }
-    document.getElementById('err-3').style.display = 'none';
-  }
-  if(n === 5) {
-    const grade = document.getElementById('f-grade').value;
-    const round = document.getElementById('f-round').value;
-    if(!grade || !round) {
-      document.getElementById('err-4').style.display = 'block';
-      return;
-    }
-    document.getElementById('err-4').style.display = 'none';
-    document.getElementById('confirm-summary').innerHTML =
-      '<strong>성명</strong>: ' + document.getElementById('f-name').value + '<br>' +
-      '<strong>생년월일</strong>: ' + document.getElementById('f-birth').value + '<br>' +
-      '<strong>연락처</strong>: ' + document.getElementById('f-phone').value + '<br>' +
-      '<strong>이메일</strong>: ' + document.getElementById('f-email').value + '<br>' +
-      '<strong>최종학력</strong>: ' + document.getElementById('f-school').value + ' ' + document.getElementById('f-degree').value + '<br>' +
-      '<strong>응시 등급</strong>: ' + GL[grade] + '<br>' +
-      '<strong>응시 회차</strong>: ' + RL[round];
-  }
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('on'));
-  document.getElementById('sec-'+n).classList.add('on');
-  document.querySelectorAll('.step-nav').forEach((el, i) => {
+function showSec(n) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+  const target = n === 'done' ? 'sec-done' : 'sec'+n;
+  document.getElementById(target).classList.add('on');
+  document.querySelectorAll('.sn').forEach((el, i) => {
     el.classList.remove('on','done');
-    if(i+1 === n) el.classList.add('on');
-    if(i+1 < n) el.classList.add('done');
+    if(typeof n === 'number') {
+      if(i+1 === n) el.classList.add('on');
+      if(i+1 < n) el.classList.add('done');
+    } else {
+      el.classList.add('done');
+    }
   });
   window.scrollTo(0, 0);
 }
 
-async function doSubmit() {
-  const btn = document.getElementById('submit-btn');
+function v(id) { return document.getElementById(id).value.trim(); }
+function g(id) { return document.getElementById(id); }
+function showErr(id, msg) {
+  const el = g(id);
+  if(msg) el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideErr(id) { g(id).style.display = 'none'; }
+
+window.goNext = function(step) {
+  if(step === 1) {
+    if(!g('f-agree').checked) { showErr('err1', '⚠ 개인정보 수집·이용에 동의해주세요.'); return; }
+    hideErr('err1'); showSec(2);
+  } else if(step === 2) {
+    if(!v('f-name')||!v('f-birth')||!v('f-phone')||!v('f-email')) { showErr('err2','⚠ 필수 항목을 모두 입력해주세요.'); return; }
+    if(v('f-birth').length!==8||isNaN(Number(v('f-birth')))) { showErr('err2','⚠ 생년월일을 8자리 숫자로 입력해주세요.'); return; }
+    hideErr('err2'); showSec(3);
+  } else if(step === 3) {
+    if(!v('f-school')) { showErr('err3','⚠ 학교명을 입력해주세요.'); return; }
+    hideErr('err3'); showSec(4);
+  } else if(step === 4) {
+    if(!g('f-grade').value||!g('f-round').value) { showErr('err4','⚠ 응시 등급과 회차를 선택해주세요.'); return; }
+    hideErr('err4');
+    g('summary').innerHTML =
+      '<strong>성명</strong>: '+v('f-name')+'<br>'+
+      '<strong>생년월일</strong>: '+v('f-birth')+'<br>'+
+      '<strong>연락처</strong>: '+v('f-phone')+'<br>'+
+      '<strong>이메일</strong>: '+v('f-email')+'<br>'+
+      '<strong>최종학력</strong>: '+v('f-school')+' '+g('f-degree').value+'<br>'+
+      '<strong>응시 등급</strong>: '+GL[g('f-grade').value]+'<br>'+
+      '<strong>응시 회차</strong>: '+RL[g('f-round').value];
+    showSec(5);
+  }
+};
+
+window.goPrev = function(step) { showSec(step); };
+
+window.doSubmit = async function() {
+  const btn = g('submit-btn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>접수 중...';
 
-  const grade   = document.getElementById('f-grade').value;
-  const round   = document.getElementById('f-round').value;
-  const name    = document.getElementById('f-name').value.trim();
-  const birth   = document.getElementById('f-birth').value.trim();
+  const grade   = g('f-grade').value;
+  const round   = g('f-round').value;
+  const name    = v('f-name');
+  const birth   = v('f-birth');
+  const phone   = v('f-phone');
   const td      = new Date();
   const dateStr = td.getFullYear()+'년 '+(td.getMonth()+1)+'월 '+td.getDate()+'일';
   const examNo  = 'KHHRI-'+grade.toUpperCase()+'-'+round+'-'+birth.slice(2,6)+(Math.floor(Math.random()*9000)+1000);
 
   try {
     await addDoc(collection(db, 'applications'), {
-      name, birth,
-      phone:    document.getElementById('f-phone').value.trim(),
-      email:    document.getElementById('f-email').value.trim(),
-      address:  document.getElementById('f-addr').value.trim(),
-      school:   document.getElementById('f-school').value.trim(),
-      major:    document.getElementById('f-major').value.trim(),
-      degree:   document.getElementById('f-degree').value,
-      gradYear: document.getElementById('f-grad-year').value.trim(),
-      career:   document.getElementById('f-career').value.trim(),
-      license:  document.getElementById('f-license').value.trim(),
+      name, birth, phone,
+      email:    v('f-email'),
+      address:  v('f-addr'),
+      school:   v('f-school'),
+      major:    v('f-major'),
+      degree:   g('f-degree').value,
+      gradYear: v('f-gradyear'),
+      career:   v('f-career') || '',
+      license:  v('f-license') || '',
       grade, round, examNo,
       appliedAt: dateStr,
       status: '접수완료'
     });
 
+    // 수험표 채우기
     const bf = birth.slice(0,4)+'.'+birth.slice(4,6)+'.'+birth.slice(6,8);
-    document.getElementById('done-num').textContent = examNo;
-    document.getElementById('t-num').textContent    = examNo;
-    document.getElementById('t-name').textContent   = name;
-    document.getElementById('t-birth').textContent  = bf;
-    document.getElementById('t-grade').textContent  = GL[grade];
-    document.getElementById('t-round').textContent  = RL[round];
-    document.getElementById('t-phone').textContent  = document.getElementById('f-phone').value.trim();
-    document.getElementById('t-date').textContent   = dateStr;
+    g('done-num').textContent = examNo;
+    g('t-num').textContent    = examNo;
+    g('t-name').textContent   = name;
+    g('t-birth').textContent  = bf;
+    g('t-grade').textContent  = GL[grade];
+    g('t-round').textContent  = RL[round];
+    g('t-phone').textContent  = phone;
+    g('t-date').textContent   = dateStr;
 
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('on'));
-    document.getElementById('sec-done').classList.add('on');
-    document.querySelectorAll('.step-nav').forEach(el => el.classList.add('done'));
-    window.scrollTo(0, 0);
+    showSec('done');
 
   } catch(e) {
-    const errEl = document.getElementById('err-submit');
-    errEl.textContent = '⚠ 접수 중 오류가 발생했습니다. 다시 시도해주세요. (' + e.message + ')';
-    errEl.style.display = 'block';
-    console.error(e);
+    showErr('err5', '⚠ 접수 중 오류가 발생했습니다. 다시 시도해주세요. ('+e.message+')');
     btn.disabled = false;
     btn.textContent = '접수 완료 및 수험표 출력';
+    console.error(e);
   }
-}
-
-// onclick에서 호출 가능하도록 전역 등록
-window.goStep    = goStep;
-window.doSubmit  = doSubmit;
+};
 </script>
 </body>
 </html>
